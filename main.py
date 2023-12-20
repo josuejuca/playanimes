@@ -54,9 +54,9 @@ def search_anime():
         if search_response.status_code == 200:
             search_content = search_response.content.decode('utf-8-sig').lstrip('\ufeff')
             search_results = json.loads(search_content)
-            return render_template('search_results.html', query=search_query, results=search_results)
+            return render_template('search_results.jinja', query=search_query, results=search_results)
     
-    return render_template('search_results.html', query=search_query, results=None)
+    return render_template('search_results.jinja', query=search_query, results=None)
 
 @app.route('/video/<int:id>')
 def get_video_episodes(id):
