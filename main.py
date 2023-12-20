@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, abort
 import requests
 import json
 import codecs
@@ -22,7 +22,7 @@ def index():
                 
         return render_template('index.jinja', popular_animes=popular_animes, latest_episodes=latest_episodes)
     else:
-        return "Erro ao buscar os dados", 500  # Retorno de erro
+        abort(404)  # Redireciona para a página de erro 404
 
 @app.route('/anime/<int:id>')
 def get_anime(id):
@@ -41,7 +41,7 @@ def get_anime(id):
 
         return render_template('get_anime.jinja', anime=anime_data[0], episodes=episodes_data)
     else:
-        return jsonify({'error': 'Anime or episodes not found'}), 404
+        abort(404)  # Redireciona para a página de erro 404
 
 @app.route('/search')
 def search_anime():
@@ -69,7 +69,15 @@ def get_video_episodes(id):
         episodes_data = json.loads(clean_content)
         return render_template('get_video_episodes.jinja', video_id=id, episodes=episodes_data)
     else:
-        return jsonify({'error': 'Episodes not found'}), 404
+        abort(404)  # Redireciona para a página de erro 404
+    
+    
+    
+# Pagina de erro 404
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('error404.jinja'), 404
+
 
 if __name__ == '__main__':
     app.run(debug=True)
