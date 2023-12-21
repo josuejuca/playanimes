@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, abort
 import requests
 import json
 import codecs
+import math
+
 
 app = Flask(__name__)
 
@@ -70,14 +72,36 @@ def get_video_episodes(id):
         return render_template('get_video_episodes.jinja', video_id=id, episodes=episodes_data)
     else:
         abort(404)  # Redireciona para a página de erro 404
-    
-    
+ 
     
 # Pagina de erro 404
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('error404.jinja'), 404
 
+@app.route('/animes/')
+def list_animes():
+    page = request.args.get('page', default=1, type=int)
+    items_per_page = 24  # Quantidade de animes por página
 
+    start_index = (page - 1) * items_per_page
+    end_index = page * items_per_page
+
+    api_url = f'https://appanimeplus.tk/play-api.php'
+    response = requests.get(api_url, params={'page': page})
+
+    if response.status_code == 200:
+        # Remover o BOM se estiver presente
+        content = response.content.decode('utf-8-sig')
+
+        all_animes = json.loads(content)
+        animes_for_page = all_animes[start_index:end_index]
+
+        total_pages = len(all_animes) // items_per_page
+
+        return render_template('animes.jinja', animes=animes_for_page, total_pages=total_pages, current_page=page)
+    else:
+        return render_template('error.html'), 500  # Página de erro em caso de falha na requisição
+    
 if __name__ == '__main__':
     app.run(debug=True)
