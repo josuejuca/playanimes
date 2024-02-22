@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Animes</title>
+</head>
+<body>
+    <h1>Listagem de Animes</h1>
+
+    <div class="anime-list">
+        {% for anime in animes %}
+            <div class="anime-item">
+                <img src="{{ anime.image_url }}" alt="{{ anime.title }}">
+                <h2>{{ anime.category_name }}</h2>
+                <p>{{ anime.id }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Adicione estilos CSS ou outras informações conforme necessário -->
+</body>
+</html>

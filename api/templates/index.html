@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Animes Populares e Últimos Episódios</title>
+</head>
+<body>
+    <h1>Animes Populares</h1>
+    <ul>
+        {% for anime in popular_animes %}
+            <li>
+                <img src="{{ anime.category_image }}" alt="{{ anime.category_name }}">
+                <p>{{ anime.category_name }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h1>Últimos Episódios</h1>
+    <ul>
+        {% for episode in latest_episodes %}
+            <li>
+                <p>Episódio: {{ episode.title }}</p>
+                <!-- Adicione outras informações dos episódios conforme necessário -->
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
