@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Episódios do Vídeo {{ video_id }}</title>
+</head>
+<body>
+    <h1>Episódios do Vídeo {{ video_id }}</h1>
+    <p>{{ title }}</p>
+
+    <ul>
+        {% for episode in episodes %}
+            <li>
+                <strong>Título do Episódio:</strong> {{ episode.title }}<br>
+                <strong>ID do Vídeo:</strong> {{ episode.video_id }}<br>
+                <strong>Video LINK </strong> {{ episode.location }}
+                <!-- Adicione outras informações relevantes dos episódios aqui -->
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

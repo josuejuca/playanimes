@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Animes na Play Animes">
+    <meta name="keywords" content="Anime, PlayAnimes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Animes | PlayAnimes</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/elegant-icons.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/plyr.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nice-select.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/slicknav.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="header__logo">
+                        <a href="/">
+                            <img src="https://assets-juca.netlify.app/img/playanimes/logo.png" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="header__nav">
+                        <nav class="header__menu mobile-menu">
+                            <ul>
+                                <li class="active"><a href="/">Homepage</a></li>
+                                <li><a href="/animes">Animes</a></li>
+                                <li><a href="/fimes">Fimes</a></li>
+                                <li><a href="/manga">Mangá</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="header__right">
+                        <a href="#" class="search-switch"><span class="icon_search"></span></a>
+                        <a href="/login"><span class="icon_profile"></span></a>
+                    </div>
+                </div>
+            </div>
+            <div id="mobile-menu-wrap"></div>
+        </div>
+    </header>
+    <!-- Header End -->
+
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="/">Home</a>
+                        <span>Animes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Product Section Begin -->
+    <section class="product-page spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="product__page__content">
+                        <div class="product__page__title">
+                            <div class="row">
+                                <div class="col-lg-8 col-md-8 col-sm-6">
+                                    <div class="section-title">
+                                        <h4>Todos os animes</h4>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6">
+                                    <div class="product__page__filter">
+                                        <p>Ordenardo por A-Z</p>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            {% for anime in animes %}
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="product__item">
+                                    <div class="product__item__pic set-bg"
+                                        data-setbg="https://cdn.appanimeplus.tk/img/{{ anime.category_image }}"
+                                        style="background-image: url(&quot;https://cdn.appanimeplus.tk/img/{{ anime.category_image }}&quot;);">
+                                    </div>
+                                    <div class="product__item__text">
+                                        <ul>
+                                            <li>Anime</li>
+                                        </ul>
+                                        <h5><a href="/anime/{{anime.id}}">{{ anime.category_name }}</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="product__pagination">
+                        {% if current_page > 1 %}
+                        <a href="?page={{ current_page - 1 }}"><i class="fa fa-angle-double-left"></i></a>
+                        {% endif %}
+
+                        {% set start_page = current_page %}
+                        {% set end_page = current_page + 4 %}
+                        {% if end_page > total_pages %}
+                        {% set start_page = total_pages - 4 %}
+                        {% set end_page = total_pages %}
+                        {% endif %}
+
+                        {% for p in range(start_page, end_page + 1) %}
+                        {% if p == current_page %}
+                        <a href="?page={{ p }}" class="current-page">{{ p }}</a>
+                        {% else %}
+                        <a href="?page={{ p }}">{{ p }}</a>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if current_page < total_pages %} <a href="?page={{ current_page + 1 }}"><i
+                                class="fa fa-angle-double-right"></i></a>
+                            {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Product Section End -->
+
+
+
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="page-up">
+            <a href="#" id="scrollToTopButton"><span class="arrow_carrot-up"></span></a>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="footer__logo">
+                        <a href="/">
+                            <img style="max-width: 160px;" src="https://assets-juca.netlify.app/img/playanimes/logo.png"
+                                alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="footer__nav">
+                        <ul>
+                            <li class="active"><a href="/">Homepage</a></li>
+                            <li><a href="/">Animes</a></li>
+                            <li><a href="/">Fimes</a></li>
+                            <li><a href="/">Mangá</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="footer__logo">
+                        <a href="https://josuejuca.com/">
+                            <img style="max-width: 150px;" src="https://assets-juca.netlify.app/img/juca/juca-white.png"
+                                alt="">
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+            <p class="c center">©
+                <script>document.write(new Date().getFullYear());</script> Play Animes - Este site não hospeda
+                nenhum vídeo em seu servidor. Todo conteúdo é provido de terceiros não afiliados.
+            </p>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Search model Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch"><i class="icon_close"></i></div>
+            <form class="search-model-form" action="/search" method="GET">
+                <input type="text" id="search-input" name="query" placeholder="Buscar Anime.....">
+                <button type="submit"><span class="icon_search z-1 "></span></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Search model end -->
+
+    <!-- Js Plugins -->
+    <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/player.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.nice-select.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/mixitup.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.slicknav.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>
