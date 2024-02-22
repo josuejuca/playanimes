@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Anime Details</title>
+</head>
+<body>
+    <h1>{{ anime.category_name }}</h1>
+    <img src="https://cdn.appanimeplus.tk/img/{{ anime.category_image }}" alt="{{ anime.category_name }}">
+    <p>{{ anime.category_description }}</p>
+    <p><strong>Genres:</strong> {{ anime.category_genres }}</p>
+    <p><strong>Year:</strong> {{ anime.ano }}</p>
+    <p><strong>Count:</strong> {{ anime.count }}</p>
+
+    <!-- Lista os episódios aqui -->
+    <h2>Episodes</h2>
+    <ul>
+        {% for episode in episodes %}
+            <li>{{ episode.title }}</li>
+        {% endfor %}
+        
+    </ul>
+</body>
+</html>
