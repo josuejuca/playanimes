@@ -1,13 +1,14 @@
+{% set ep = episodes[0] %}
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Animes na Play Animes">
+    <meta name="description" content="{{ title }} na Play Animes">
     <meta name="keywords" content="Anime, PlayAnimes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Animes | PlayAnimes</title>
+    <title>Video ID {{ video_id }} | PlayAnimes</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -47,9 +48,7 @@
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li class="active"><a href="/">Homepage</a></li>
-                                <li><a href="/animes">Animes</a></li>
-                                <li><a href="/fimes">Fimes</a></li>
-                                <li><a href="/manga">Mangá</a></li>
+                                <li><a href="/animes">Animes</a></li>                               
                             </ul>
                         </nav>
                     </div>
@@ -57,7 +56,6 @@
                 <div class="col-lg-2">
                     <div class="header__right">
                         <a href="#" class="search-switch"><span class="icon_search"></span></a>
-                        <a href="/login"><span class="icon_profile"></span></a>
                     </div>
                 </div>
             </div>
@@ -66,6 +64,7 @@
     </header>
     <!-- Header End -->
 
+
     <!-- Breadcrumb Begin -->
     <div class="breadcrumb-option">
         <div class="container">
@@ -73,85 +72,56 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb__links">
                         <a href="/">Home</a>
-                        <span>Animes</span>
+                        <a href="/animes">Anime</a>
+                        <a href="/anime/{{ ep.category_id }}">ID {{ video_id }}</a>
+                        <span>{{ ep.title }}</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- Breadcrumb End -->
-
-    <!-- Product Section Begin -->
-    <section class="product-page spad">
+    <!-- Anime Section Begin -->
+    <section class="anime-details spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8">
-                    <div class="product__page__content">
-                        <div class="product__page__title">
-                            <div class="row">
-                                <div class="col-lg-8 col-md-8 col-sm-6">
-                                    <div class="section-title">
-                                        <h4>Todos os animes</h4>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-6">
-                                    <div class="product__page__filter">
-                                        <p>Ordenardo por A-Z</p>                                        
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            {% for anime in animes %}
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg"
-                                        data-setbg="https://cdn.appanimeplus.tk/img/{{ anime.category_image }}"
-                                        style="background-image: url(&quot;https://cdn.appanimeplus.tk/img/{{ anime.category_image }}&quot;);">
-                                    </div>
-                                    <div class="product__item__text">
-                                        <ul>
-                                            <li>Anime</li>
-                                        </ul>
-                                        <h5><a href="/anime/{{anime.id}}">{{ anime.category_name }}</a></h5>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="product__pagination">
-                        {% if current_page > 1 %}
-                        <a href="?page={{ current_page - 1 }}"><i class="fa fa-angle-double-left"></i></a>
-                        {% endif %}
-
-                        {% set start_page = current_page %}
-                        {% set end_page = current_page + 4 %}
-                        {% if end_page > total_pages %}
-                        {% set start_page = total_pages - 4 %}
-                        {% set end_page = total_pages %}
-                        {% endif %}
-
-                        {% for p in range(start_page, end_page + 1) %}
-                        {% if p == current_page %}
-                        <a href="?page={{ p }}" class="current-page">{{ p }}</a>
-                        {% else %}
-                        <a href="?page={{ p }}">{{ p }}</a>
-                        {% endif %}
-                        {% endfor %}
-
-                        {% if current_page < total_pages %} <a href="?page={{ current_page + 1 }}"><i
-                                class="fa fa-angle-double-right"></i></a>
-                            {% endif %}
+                <div class="col-lg-12">
+                    <div class="anime__video__player">
+                        <video id="player" playsinline controls
+                            data-poster="https://assets-juca.netlify.app/img/playanimes/play_animes-w.png">
+                            <source src="{{ ep.location }}" type="video/mp4" />
+                            <!-- Captions are optional -->
+                            <track kind="captions" label="Anime" src="#" srclang="jp" default />
+                        </video>
                     </div>
                 </div>
             </div>
+            
+            <strong>Título do Episódio:</strong> {{ ep.title }}<br>
+            <strong>ID do Vídeo:</strong> <br>
+            <div id="disqus_thread"></div>
+            <script>
+                /**
+                *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+                /*
+                */
+                var disqus_config = function () {
+                    this.page.url = 'http://playanimes.josuejuca.com/video/{{ video_id }}';  // Replace PAGE_URL with your page's canonical URL variable
+                    this.page.identifier = this.page.url; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                };
+                (function () { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://playanimes-chat.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments
+                    powered by Disqus.</a></noscript>
         </div>
     </section>
-    <!-- Product Section End -->
-
-
-
+    <!-- Anime Section End -->
     <!-- Footer Section Begin -->
     <footer class="footer">
         <div class="page-up">
@@ -171,9 +141,7 @@
                     <div class="footer__nav">
                         <ul>
                             <li class="active"><a href="/">Homepage</a></li>
-                            <li><a href="/">Animes</a></li>
-                            <li><a href="/">Fimes</a></li>
-                            <li><a href="/">Mangá</a></li>
+                            <li><a href="/animes">Animes</a></li>
                         </ul>
                     </div>
                 </div>

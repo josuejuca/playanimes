@@ -3,11 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Erro na Play Animes">
+    <meta name="description" content="{{ anime.category_name }} na Play Animes">
     <meta name="keywords" content="Anime, PlayAnimes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Erro | PlayAnimes</title>
+    <title>{{ anime.category_name }} | PlayAnimes</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -48,8 +48,6 @@
                             <ul>
                                 <li class="active"><a href="/">Homepage</a></li>
                                 <li><a href="/animes">Animes</a></li>
-                                <li><a href="/fimes">Fimes</a></li>
-                                <li><a href="/manga">Mangá</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -74,6 +72,7 @@
                     <div class="breadcrumb__links">
                         <a href="/">Home</a>
                         <a href="/animes">Animes</a>
+                        <span>{{ anime.category_name }}</span>
                     </div>
                 </div>
             </div>
@@ -81,26 +80,9 @@
     </div>
     <!-- Breadcrumb End -->
 
-    <!-- Blog Details Section Begin -->
-    <section class="blog-details spad">
-        <div class="container">
-            <div class="row d-flex justify-content-center">
-                <div class="col-lg-8">
-                    <div class="blog__details__title">
-                        <h6>Oops! Página não encontrada!!</h6>
-                        <h2>404</h2>
-                        <h6>A página que você procura não existe. Pode ter sido movido ou excluído.</h6>
-                        <div class="blog__details__social">
-                            <a href="/" class="facebook"><i class="fa fa-home"></i> VOLTAR</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Blog Details Section End -->
+   <!-- BASE PLAYANIMES  -->
 
-
+   
     <!-- Footer Section Begin -->
     <footer class="footer">
         <div class="page-up">
@@ -120,9 +102,7 @@
                     <div class="footer__nav">
                         <ul>
                             <li class="active"><a href="/">Homepage</a></li>
-                            <li><a href="/">Animes</a></li>
-                            <li><a href="/">Fimes</a></li>
-                            <li><a href="/">Mangá</a></li>
+                            <li><a href="/animes">Animes</a></li>
                         </ul>
                     </div>
                 </div>
@@ -144,16 +124,17 @@
         </div>
     </footer>
     <!-- Footer Section End -->
+
     <!-- Search model Begin -->
     <div class="search-model">
-        <div class="h-100 d-flex align-items-center justify-content-center">
-            <div class="search-close-switch"><i class="icon_close"></i></div>
-            <form class="search-model-form" action="/search" method="GET">
-                <input type="text" id="search-input" name="query" placeholder="Buscar Anime.....">
-                <button type="submit"><span class="icon_search z-1 "></span></button>
-            </form>
-        </div>
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch"><i class="icon_close"></i></div>
+        <form class="search-model-form" action="/search" method="GET">
+            <input type="text" id="search-input" name="query" placeholder="Buscar Anime.....">
+            <button type="submit"><span class="icon_search z-1 "></span></button>
+        </form>
     </div>
+</div>
 
     <!-- Search model end -->
 

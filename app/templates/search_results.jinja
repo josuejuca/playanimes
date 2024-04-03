@@ -3,11 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="{{ anime.category_name }} na Play Animes">
+    <meta name="description" content="Buscar anime na Play Animes">
     <meta name="keywords" content="Anime, PlayAnimes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ anime.category_name }} | PlayAnimes</title>
+    <title>Search | PlayAnimes</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -47,9 +47,7 @@
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li class="active"><a href="/">Homepage</a></li>
-                                <li><a href="/animes">Animes</a></li>
-                                <li><a href="/fimes">Fimes</a></li>
-                                <li><a href="/manga">Mangá</a></li>
+                                <li><a href="/animes">Animes</a></li>                               
                             </ul>
                         </nav>
                     </div>
@@ -57,7 +55,6 @@
                 <div class="col-lg-2">
                     <div class="header__right">
                         <a href="#" class="search-switch"><span class="icon_search"></span></a>
-                        <a href="/login"><span class="icon_profile"></span></a>
                     </div>
                 </div>
             </div>
@@ -74,17 +71,60 @@
                     <div class="breadcrumb__links">
                         <a href="/">Home</a>
                         <a href="/animes">Animes</a>
-                        <span>{{ anime.category_name }}</span>
+                        <span>Busca: {{ query }}</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Breadcrumb End -->
 
-   <!-- BASE PLAYANIMES  -->
+    <!-- BASE PLAY ANIMES -->
 
-   
+
+    <section class="product-page spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="product__page__content">
+                        <div class="product__page__title">
+                            <div class="row">
+                                <div class="col-lg-8 col-md-8 col-sm-6">
+                                    <div class="section-title">
+                                        <h4>Resultados da pesquisa: "{{ query }}"</h4>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            {% if results %}
+                                {% for result in results %}
+                                <div class="col-lg-4 col-md-6 col-sm-6">
+                                    <div class="product__item">
+                                        <div class="product__item__pic set-bg"
+                                            data-setbg="https://cdn.appanimeplus.tk/img/{{ result.category_image }}"
+                                            style="background-image: url(&quot;https://cdn.appanimeplus.tk/img/{{ result.category_image }}&quot;);">
+                                        </div>
+                                        <div class="product__item__text">                                           
+                                            <h5><a href="anime/{{result.id}}">{{ result.category_name }}</a></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <p>Sem Resultados</p>
+                            {% endif %}
+
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
     <!-- Footer Section Begin -->
     <footer class="footer">
         <div class="page-up">
@@ -104,9 +144,7 @@
                     <div class="footer__nav">
                         <ul>
                             <li class="active"><a href="/">Homepage</a></li>
-                            <li><a href="/">Animes</a></li>
-                            <li><a href="/">Fimes</a></li>
-                            <li><a href="/">Mangá</a></li>
+                            <li><a href="/animes">Animes</a></li>
                         </ul>
                     </div>
                 </div>
@@ -131,14 +169,14 @@
 
     <!-- Search model Begin -->
     <div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch"><i class="icon_close"></i></div>
-        <form class="search-model-form" action="/search" method="GET">
-            <input type="text" id="search-input" name="query" placeholder="Buscar Anime.....">
-            <button type="submit"><span class="icon_search z-1 "></span></button>
-        </form>
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch"><i class="icon_close"></i></div>
+            <form class="search-model-form" action="/search" method="GET">
+                <input type="text" id="search-input" name="query" placeholder="Buscar Anime.....">
+                <button type="submit"><span class="icon_search z-1 "></span></button>
+            </form>
+        </div>
     </div>
-</div>
 
     <!-- Search model end -->
 
