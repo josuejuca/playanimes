@@ -90,7 +90,7 @@
                     <div class="anime__video__player">
                         <video id="player" playsinline controls
                             data-poster="https://assets-juca.netlify.app/img/playanimes/play_animes-w.png">
-                            <source src="{{ ep.mS9wR2qY7pK7vX5n | decrypt_jwt }}" type="video/mp4" />
+                            <source src="{{ ep['mS9wR2qY7pK7vX5n'] | decrypt_jwt }}" type="video/mp4" />
                             <!-- Captions are optional -->
                             <track kind="captions" label="Anime" src="#" srclang="jp" default />
                         </video>
