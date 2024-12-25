@@ -5,7 +5,7 @@ import codecs
 import math
 
 from jinja2 import Environment, FileSystemLoader
-from decryptor import ManagerDecrypt
+from api.decryptor import ManagerDecrypt # Vercel Ajuste 
 
 # Inicializa o decryptor
 decryptor = ManagerDecrypt()
