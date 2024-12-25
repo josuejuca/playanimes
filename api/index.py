@@ -81,7 +81,13 @@ def get_video_episodes(id):
         content = episodes_response.content.decode('utf-8-sig')  # Remove o BOM se estiver presente
         clean_content = content.lstrip('\ufeff')  # Remove o BOM no início da string, se necessário
         episodes_data = json.loads(clean_content)
-        return render_template('get_video_episodes.jinja', video_id=id, episodes=episodes_data)
+        
+        # Verifica se a chave esperada existe no primeiro item
+        if episodes_data and isinstance(episodes_data, list) and "mS9wR2qY7pK7vX5n" in episodes_data[0]:
+            ep = episodes_data[0]
+            return render_template('get_video_episodes.jinja', ep=ep)
+        else:
+            return render_template('error404.jinja'), 404  # Página de erro 404 caso a chave não exista
     else:
         abort(404)  # Redireciona para a página de erro 404
  
