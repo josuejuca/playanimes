@@ -85,8 +85,11 @@
             <div class="anime__details__content">
                 <div class="row">
                     <div class="col-lg-3">
-                        <div class="anime__details__pic set-bg"
-                            data-setbg="https://cdn.appanimeplus.tk/img/{{ anime.category_image }}">
+                        <div class="anime__details__pic set-bg" data-setbg="{% if anime.category_image == '6c058e622c101b83d9920e94235dfaa6' %}
+                     {{ url_for('static', filename='img/anime/arcane-poster.jpg') }}
+                 {% else %}
+                     https://cdn.appanimeplus.tk/img/{{ anime.category_image }}
+                 {% endif %}">
                         </div>
                     </div>
                     <div class="col-lg-9">
@@ -111,7 +114,6 @@
                                 </div>
                             </div>
                             <div class="anime__details__btn">
-                                <a href="#" class="follow-btn"><i class="fa fa-heart-o"></i> Favoritar</a>
                                 <a href="#" class="watch-btn"><span> Assistir</span> <i
                                         class="fa fa-angle-right"></i></a>
                             </div>
@@ -201,14 +203,14 @@
 
     <!-- Search model Begin -->
     <div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch"><i class="icon_close"></i></div>
-        <form class="search-model-form" action="/search" method="GET">
-            <input type="text" id="search-input" name="query" placeholder="Buscar Anime.....">
-            <button type="submit"><span class="icon_search z-1 "></span></button>
-        </form>
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch"><i class="icon_close"></i></div>
+            <form class="search-model-form" action="/search" method="GET">
+                <input type="text" id="search-input" name="query" placeholder="Buscar Anime.....">
+                <button type="submit"><span class="icon_search z-1 "></span></button>
+            </form>
+        </div>
     </div>
-</div>
 
     <!-- Search model end -->
 

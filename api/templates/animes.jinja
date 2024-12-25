@@ -93,7 +93,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-6">
                                     <div class="product__page__filter">
-                                        <p>Ordenardo por A-Z</p>                                        
+                                        <p>Ordenardo por A-Z</p>
                                     </div>
                                 </div>
                             </div>
@@ -102,10 +102,12 @@
                             {% for anime in animes %}
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
-                                    <div class="product__item__pic set-bg"
-                                        data-setbg="https://cdn.appanimeplus.tk/img/{{ anime.category_image }}"
-                                        style="background-image: url(&quot;https://cdn.appanimeplus.tk/img/{{ anime.category_image }}&quot;);">
-                                    </div>
+                                    <a href="/anime/{{anime.id}}">
+                                        <div class="product__item__pic set-bg"
+                                            data-setbg="https://cdn.appanimeplus.tk/img/{{ anime.category_image }}"
+                                            style="background-image: url(&quot;https://cdn.appanimeplus.tk/img/{{ anime.category_image }}&quot;);">
+                                        </div>
+                                    </a>
                                     <div class="product__item__text">
                                         <ul>
                                             <li>Anime</li>

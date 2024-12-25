@@ -6,6 +6,29 @@
 
 */
 
+.bg-text-hero {
+	position: relative;
+	display: inline-block;
+	color: white; /* Garante que o texto fique legível */
+	font-weight: bold;
+	z-index: 1;
+	padding: 5px 10px; /* Adiciona um pouco de espaço ao redor do texto */
+	border-radius: 2px; /* Bordas arredondadas */
+  }
+  
+  .bg-text-hero::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(22, 2, 2, 0.267); /* Fundo escuro semitransparente */
+	backdrop-filter: blur(8px); /* Aplica um desfoque */
+	border-radius: 8px; /* Mantém bordas arredondadas */
+	z-index: -1;
+  }
+
 html,
 body {
 	height: 100%;

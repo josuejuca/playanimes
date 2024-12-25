@@ -4,13 +4,25 @@ import json
 import codecs
 import math
 
+from jinja2 import Environment, FileSystemLoader
+from decryptor import ManagerDecrypt
+
+# Inicializa o decryptor
+decryptor = ManagerDecrypt()
+
+# Define a função como filtro
+def decrypt_jwt_filter(token):
+    return decryptor.decrypt_jwt(token)
 
 app = Flask(__name__)
 
+# Registra o filtro no ambiente Jinja2 do Flask
+app.jinja_env.filters["decrypt_jwt"] = decrypt_jwt_filter
+
 @app.route('/')
 def index():
-    popular_animes_url = 'https://atv2.net/play-api.php?populares'
-    latest_episodes_url = 'https://atv2.net/play-api.php?latest'
+    popular_animes_url = 'https://atv2.net/meuanimetv-74.php?populares'
+    latest_episodes_url = 'https://atv2.net/meuanimetv-74.php?latest'
     
     popular_response = requests.get(popular_animes_url)
     latest_response = requests.get(latest_episodes_url)
@@ -28,8 +40,8 @@ def index():
 
 @app.route('/anime/<int:id>')
 def get_anime(id):
-    anime_info_url = f'https://atv2.net/play-api.php?info={id}'
-    episodes_url = f'https://atv2.net/play-api.php?cat_id={id}'
+    anime_info_url = f'https://atv2.net/meuanimetv-74.php?info={id}'
+    episodes_url = f'https://atv2.net/meuanimetv-74.php?cat_id={id}'
 
     anime_response = requests.get(anime_info_url)
     episodes_response = requests.get(episodes_url)
@@ -50,7 +62,7 @@ def search_anime():
     search_query = request.args.get('query')
 
     if search_query:
-        search_url = f'https://atv2.net/play-api.php?search={search_query}'
+        search_url = f'https://atv2.net/meuanimetv-74.php?search={search_query}'
         search_response = requests.get(search_url)
         
         if search_response.status_code == 200:
@@ -62,7 +74,7 @@ def search_anime():
 
 @app.route('/video/<int:id>')
 def get_video_episodes(id):
-    episodes_url = f'https://atv2.net/play-api.php?episodios={id}'
+    episodes_url = f'https://atv2.net/meuanimetv-74.php?episodios={id}'
     episodes_response = requests.get(episodes_url)
     
     if episodes_response.status_code == 200:
@@ -87,7 +99,7 @@ def list_animes():
     start_index = (page - 1) * items_per_page
     end_index = page * items_per_page
 
-    api_url = f'https://atv2.net/play-api.php'
+    api_url = f'https://atv2.net/meuanimetv-74.php'
     response = requests.get(api_url, params={'page': page})
 
     if response.status_code == 200:

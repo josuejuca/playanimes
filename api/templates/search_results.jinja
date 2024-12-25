@@ -47,7 +47,7 @@
                         <nav class="header__menu mobile-menu">
                             <ul>
                                 <li class="active"><a href="/">Homepage</a></li>
-                                <li><a href="/animes">Animes</a></li>                               
+                                <li><a href="/animes">Animes</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -98,24 +98,26 @@
                         </div>
                         <div class="row">
                             {% if results %}
-                                {% for result in results %}
-                                <div class="col-lg-4 col-md-6 col-sm-6">
-                                    <div class="product__item">
+                            {% for result in results %}
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="product__item">
+                                    <a href="anime/{{result.id}}">
                                         <div class="product__item__pic set-bg"
                                             data-setbg="https://cdn.appanimeplus.tk/img/{{ result.category_image }}"
                                             style="background-image: url(&quot;https://cdn.appanimeplus.tk/img/{{ result.category_image }}&quot;);">
                                         </div>
-                                        <div class="product__item__text">                                           
-                                            <h5><a href="anime/{{result.id}}">{{ result.category_name }}</a></h5>
-                                        </div>
+                                    </a>
+                                    <div class="product__item__text">
+                                        <h5><a href="anime/{{result.id}}">{{ result.category_name }}</a></h5>
                                     </div>
                                 </div>
-                                {% endfor %}
+                            </div>
+                            {% endfor %}
                             {% else %}
-                                <p>Sem Resultados</p>
+                            <p>Sem Resultados</p>
                             {% endif %}
 
-                            
+
                         </div>
                     </div>
 
