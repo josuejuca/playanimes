@@ -161,6 +161,19 @@ def get_video_episodes(id):
                 # Verifica se os dados retornados não estão vazios
                 if episodes_data and isinstance(episodes_data, list):
                     ep = episodes_data[0]  # Assume o primeiro item como válido
+                    
+                    # Decifra o token JWT, se existir
+                    if 'mS9wR2qY7pK7vX5n' in ep and ep['mS9wR2qY7pK7vX5n']:
+                        try:
+                            decoded_video_url = decryptor.decrypt_jwt(ep['mS9wR2qY7pK7vX5n'])
+                            ep['decoded_video_url'] = decoded_video_url
+                            logging.debug(f"Decoded Video URL: {decoded_video_url}")
+                        except Exception as e:
+                            logging.error(f"Error decrypting JWT: {e}")
+                            ep['decoded_video_url'] = None
+                    else:
+                        ep['decoded_video_url'] = None
+
                     return render_template('get_video_episodes.jinja', ep=ep)
                 else:
                     logging.error("Empty or unexpected data structure in API response.")
