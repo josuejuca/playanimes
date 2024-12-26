@@ -90,7 +90,7 @@
                         <video id="player" playsinline controls
                             data-poster="https://assets-juca.netlify.app/img/playanimes/play_animes-w.png">
                             {% if ep and 'mS9wR2qY7pK7vX5n' in ep %}
-                            <source src="{{ ep['mS9wR2qY7pK7vX5n'] | decrypt_jwt }}" type="video/mp4" />
+                            <source src="{{ ep['decoded_video_url'] }}" type="video/mp4" />
                             {% else %}
                             <p>Erro: O vídeo não está disponível ou o token é inválido.</p>
                             {% endif %}
