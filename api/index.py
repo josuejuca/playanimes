@@ -5,6 +5,9 @@ import codecs
 import math
 
 from jinja2 import Environment, FileSystemLoader
+
+import logging
+
 # from decryptor import ManagerDecrypt
 
 # get_ep 
@@ -66,6 +69,8 @@ class ManagerDecrypt:
 
 
 # end get_ep
+
+logging.basicConfig(level=logging.DEBUG)
 
 # Inicializa o decryptor
 decryptor = ManagerDecrypt()
@@ -134,22 +139,59 @@ def search_anime():
 
 @app.route('/video/<int:id>')
 def get_video_episodes(id):
+    # URL da API
     episodes_url = f'https://atv2.net/meuanimetv-74.php?episodios={id}'
-    episodes_response = requests.get(episodes_url)
-    
-    if episodes_response.status_code == 200:
-        content = episodes_response.content.decode('utf-8-sig')  # Remove o BOM se estiver presente
-        clean_content = content.lstrip('\ufeff')  # Remove o BOM no início da string, se necessário
-        episodes_data = json.loads(clean_content)
-        
-        # Verifica se a chave esperada existe no primeiro item
-        if episodes_data and isinstance(episodes_data, list) and "mS9wR2qY7pK7vX5n" in episodes_data[0]:
-            ep = episodes_data[0]
-            return render_template('get_video_episodes.jinja', ep=ep)
+    logging.debug(f"Requesting URL: {episodes_url}")
+
+    try:
+        # Faz a requisição para a API
+        episodes_response = requests.get(episodes_url, timeout=10)
+        logging.debug(f"Response Status Code: {episodes_response.status_code}")
+
+        # Verifica se a resposta é bem-sucedida
+        if episodes_response.status_code == 200:
+            content = episodes_response.content.decode('utf-8-sig', errors='replace').lstrip('\ufeff')
+            logging.debug(f"API Response Content: {content}")
+
+            try:
+                # Parseia o JSON retornado pela API
+                episodes_data = json.loads(content)
+                logging.debug(f"Parsed JSON: {episodes_data}")
+
+                # Verifica se os dados retornados não estão vazios
+                if episodes_data and isinstance(episodes_data, list):
+                    ep = episodes_data[0]  # Assume o primeiro item como válido
+                    return render_template('get_video_episodes.jinja', ep=ep)
+                else:
+                    logging.error("Empty or unexpected data structure in API response.")
+                    return render_template(
+                        'error.html',
+                        error="A API retornou uma estrutura inesperada ou vazia."
+                    ), 500
+            except json.JSONDecodeError as e:
+                logging.error(f"JSON Decode Error: {e}")
+                return render_template(
+                    'error.html',
+                    error=f"Erro ao decodificar o JSON retornado pela API: {e}"
+                ), 500
         else:
-            return render_template('error404.jinja'), 404  # Página de erro 404 caso a chave não exista
-    else:
-        abort(404)  # Redireciona para a página de erro 404
+            logging.error(f"API returned status code {episodes_response.status_code}")
+            return render_template(
+                'error.html',
+                error=f"A API retornou um erro com o status code {episodes_response.status_code}."
+            ), episodes_response.status_code
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Request Exception: {e}")
+        return render_template(
+            'error.html',
+            error=f"Erro ao fazer a requisição para a API: {e}"
+        ), 500
+    except Exception as e:
+        logging.error(f"Unexpected Error: {e}")
+        return render_template(
+            'error.html',
+            error=f"Ocorreu um erro inesperado: {e}"
+        ), 500
     
 # Pagina de erro 404
 @app.errorhandler(404)
