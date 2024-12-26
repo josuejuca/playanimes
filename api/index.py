@@ -5,7 +5,67 @@ import codecs
 import math
 
 from jinja2 import Environment, FileSystemLoader
-from api.decryptor import ManagerDecrypt # Vercel Ajuste 
+# from decryptor import ManagerDecrypt
+
+# get_ep 
+
+import base64
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import unpad
+
+class ManagerDecrypt:
+    def __init__(self):
+        self.keys = [
+            "mS9wR2qY7pK7vX5n",
+            "fV3gK5vU7uG6hU5e",
+            "oU0dI2lL2tK2dR9f",
+        ]
+
+        # Configuração baseada no script original
+        self.config = {
+            "sigBytes": 32,
+            "words": [
+                1884436332, 1295477057, 929846578, 1867920227,
+                1144552015, 878792752, 1917597540, 1211458376
+            ],
+        }
+
+    @staticmethod
+    def reverse(value: str) -> str:
+        """
+        Reverte uma string.
+        """
+        return value[::-1]
+
+    def decrypt_jwt(self, token: str) -> str:
+        """
+        Decifra um token JWT usando a lógica migrada do TypeScript.
+        """
+        try:
+            # Extrai os últimos 64 caracteres como IV
+            iv = token[-64:]
+            iv_reversed = self.reverse(iv)
+
+            # Ajusta o IV para os primeiros 16 bytes (128 bits)
+            iv_bytes = iv_reversed.encode('utf-8')[:16]
+
+            # Extrai o payload criptografado do token
+            encrypted_payload = token[36:-64]
+            encrypted_bytes = base64.urlsafe_b64decode(encrypted_payload + '==')
+
+            # Simula a chave (usando os "words" do config como base para gerar uma chave)
+            key_bytes = b''.join(w.to_bytes(4, 'big') for w in self.config["words"])
+
+            # Decifra usando AES com CBC
+            cipher = AES.new(key_bytes, AES.MODE_CBC, iv_bytes)
+            decrypted_bytes = unpad(cipher.decrypt(encrypted_bytes), AES.block_size)
+            return decrypted_bytes.decode('utf-8')
+
+        except Exception as e:
+            return f"Failed to decrypt: {e}"
+
+
+# end get_ep
 
 # Inicializa o decryptor
 decryptor = ManagerDecrypt()
@@ -75,36 +135,21 @@ def search_anime():
 @app.route('/video/<int:id>')
 def get_video_episodes(id):
     episodes_url = f'https://atv2.net/meuanimetv-74.php?episodios={id}'
-    logging.debug(f"Requesting URL: {episodes_url}")
-
-    try:
-        episodes_response = requests.get(episodes_url)
-        logging.debug(f"Response Status Code: {episodes_response.status_code}")
-
-        if episodes_response.status_code == 200:
-            content = episodes_response.content.decode('utf-8-sig', errors='replace')
-            logging.debug(f"Response Content: {content}")
-
-            try:
-                episodes_data = json.loads(content)
-                logging.debug(f"Parsed JSON: {episodes_data}")
-
-                if episodes_data and isinstance(episodes_data, list) and "mS9wR2qY7pK7vX5n" in episodes_data[0]:
-                    ep = episodes_data[0]
-                    return render_template('get_video_episodes.jinja', ep=ep)
-                else:
-                    logging.error("Key 'mS9wR2qY7pK7vX5n' not found in the API response.")
-                    return render_template('error404.jinja'), 404
-            except json.JSONDecodeError as e:
-                logging.error(f"JSON Decode Error: {e}")
-                return render_template('error404.jinja'), 404
+    episodes_response = requests.get(episodes_url)
+    
+    if episodes_response.status_code == 200:
+        content = episodes_response.content.decode('utf-8-sig')  # Remove o BOM se estiver presente
+        clean_content = content.lstrip('\ufeff')  # Remove o BOM no início da string, se necessário
+        episodes_data = json.loads(clean_content)
+        
+        # Verifica se a chave esperada existe no primeiro item
+        if episodes_data and isinstance(episodes_data, list) and "mS9wR2qY7pK7vX5n" in episodes_data[0]:
+            ep = episodes_data[0]
+            return render_template('get_video_episodes.jinja', ep=ep)
         else:
-            logging.error(f"Failed to fetch data from API. Status Code: {episodes_response.status_code}")
-            abort(404)
-    except Exception as e:
-        logging.error(f"Unexpected Error: {e}")
-        abort(500)
- 
+            return render_template('error404.jinja'), 404  # Página de erro 404 caso a chave não exista
+    else:
+        abort(404)  # Redireciona para a página de erro 404
     
 # Pagina de erro 404
 @app.errorhandler(404)
@@ -136,4 +181,4 @@ def list_animes():
         return render_template('error.html'), 500  # Página de erro em caso de falha na requisição
     
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
