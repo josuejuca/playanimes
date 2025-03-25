@@ -5,7 +5,7 @@ import codecs
 import math
 
 from jinja2 import Environment, FileSystemLoader
-
+from datetime import datetime
 import logging
 
 # from decryptor import ManagerDecrypt
@@ -83,6 +83,59 @@ app = Flask(__name__)
 
 # Registra o filtro no ambiente Jinja2 do Flask
 app.jinja_env.filters["decrypt_jwt"] = decrypt_jwt_filter
+
+@app.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    host_url = request.host_url.rstrip('/')
+    pages = []
+
+    # Rota principal
+    pages.append({
+        'loc': f"{host_url}/",
+        'lastmod': datetime.now().date().isoformat()
+    })
+
+    # Página de listagem de animes
+    pages.append({
+        'loc': f"{host_url}/animes/",
+        'lastmod': datetime.now().date().isoformat()
+    })
+
+    # Busca todos os animes da API para gerar links de /anime/<id>
+    api_url = 'https://atv2.net/meuanimetv-74.php'
+    response = requests.get(api_url)
+
+    if response.status_code == 200:
+        content = response.content.decode('utf-8-sig')
+        animes = json.loads(content)
+
+        for anime in animes:
+            anime_id = anime.get('id')
+            if anime_id:
+                pages.append({
+                    'loc': f"{host_url}/anime/{anime_id}",
+                    'lastmod': datetime.now().date().isoformat()
+                })
+                pages.append({
+                    'loc': f"{host_url}/video/{anime_id}",
+                    'lastmod': datetime.now().date().isoformat()
+                })
+
+    # Gerar XML
+    sitemap_xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    sitemap_xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+
+    for page in pages:
+        sitemap_xml += '  <url>\n'
+        sitemap_xml += f'    <loc>{page["loc"]}</loc>\n'
+        sitemap_xml += f'    <lastmod>{page["lastmod"]}</lastmod>\n'
+        sitemap_xml += '    <changefreq>weekly</changefreq>\n'
+        sitemap_xml += '    <priority>0.8</priority>\n'
+        sitemap_xml += '  </url>\n'
+
+    sitemap_xml += '</urlset>'
+
+    return Response(sitemap_xml, mimetype='application/xml')
 
 @app.route('/')
 def index():
